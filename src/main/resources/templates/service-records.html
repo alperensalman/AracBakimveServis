@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Servis Geçmişi — Araç Bakım & Servis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🔧 Araç Bakım & Servis</div>
+    <div class="nav-links">
+        <a th:href="@{/ui/dashboard}" class="nav-link">Dashboard</a>
+        <a th:href="@{/ui/vehicles}" class="nav-link">Araçlar</a>
+        <a th:href="@{/ui/services}" class="nav-link">Servis Kayıtları</a>
+    </div>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-logout">Çıkış</button>
+    </form>
+</nav>
+
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">Servis Geçmişi</h1>
+        <p class="page-sub" th:text="'Araç ID: ' + ${vehicleId} + ' için servis kayıtları'"></p>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">Kayıtlar</h2>
+            <a th:href="@{/ui/vehicles}" class="btn-sm">← Araçlara Dön</a>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Açıklama</th>
+                    <th>Tarih</th>
+                    <th>Maliyet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="r : ${records}">
+                    <td th:text="${r.id}"></td>
+                    <td th:text="${r.description}"></td>
+                    <td th:text="${r.serviceDate}"></td>
+                    <td><span class="badge-cost" th:text="'₺' + ${r.cost}"></span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(records)}">
+                    <td colspan="4" class="empty-row">Bu araca ait servis kaydı bulunamadı.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

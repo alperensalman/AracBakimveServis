@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Araçlar — Araç Bakım & Servis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🔧 Araç Bakım & Servis</div>
+    <div class="nav-links">
+        <a th:href="@{/ui/dashboard}" class="nav-link">Dashboard</a>
+        <a th:href="@{/ui/vehicles}" class="nav-link active">Araçlar</a>
+        <a th:href="@{/ui/services}" class="nav-link">Servis Kayıtları</a>
+    </div>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-logout">Çıkış</button>
+    </form>
+</nav>
+
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">Araç Yönetimi</h1>
+        <p class="page-sub">Araç ekle, listele ve servis geçmişini görüntüle</p>
+    </div>
+
+    <div class="two-col">
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Yeni Araç Ekle</h2>
+            </div>
+            <form th:action="@{/ui/vehicles/add}" th:object="${vehicleDTO}" method="post">
+                <div class="form-group">
+                    <label>Plaka</label>
+                    <input type="text" th:field="*{plate}" placeholder="34ABC123">
+                    <span class="field-error" th:if="${#fields.hasErrors('plate')}" th:errors="*{plate}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Marka</label>
+                    <input type="text" th:field="*{brand}" placeholder="Toyota">
+                    <span class="field-error" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" th:field="*{model}" placeholder="Corolla">
+                    <span class="field-error" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Vites Tipi</label>
+                    <select th:field="*{gearType}">
+                        <option value="">Seçiniz</option>
+                        <option value="Otomatik">Otomatik</option>
+                        <option value="Manuel">Manuel</option>
+                        <option value="Yarı Otomatik">Yarı Otomatik</option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('gearType')}" th:errors="*{gearType}"></span>
+                </div>
+                <button type="submit" class="btn-primary full-width">Araç Ekle</button>
+            </form>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Araç Listesi</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Plaka</th>
+                        <th>Marka / Model</th>
+                        <th>Vites</th>
+                        <th>Servis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="v : ${vehicles}">
+                        <td><span class="badge-plate" th:text="${v.plate}"></span></td>
+                        <td th:text="${v.brand + ' ' + v.model}"></td>
+                        <td th:text="${v.gearType}"></td>
+                        <td><a th:href="@{/ui/services/vehicle/{id}(id=${v.id})}" class="btn-sm">Geçmiş</a></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(vehicles)}">
+                        <td colspan="4" class="empty-row">Henüz araç kaydı yok.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

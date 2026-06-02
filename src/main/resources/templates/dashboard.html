@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard — Araç Bakım & Servis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">🔧 Araç Bakım & Servis</div>
+    <div class="nav-links">
+        <a th:href="@{/ui/dashboard}" class="nav-link active">Dashboard</a>
+        <a th:href="@{/ui/vehicles}" class="nav-link">Araçlar</a>
+        <a th:href="@{/ui/services}" class="nav-link">Servis Kayıtları</a>
+    </div>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn-logout">Çıkış</button>
+    </form>
+</nav>
+
+<main class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Sisteme kayıtlı araç ve servis bilgileri</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">🚗</div>
+            <div class="stat-info">
+                <span class="stat-number" th:text="${totalVehicles}">0</span>
+                <span class="stat-label">Kayıtlı Araç</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔩</div>
+            <div class="stat-info">
+                <span class="stat-number">Aktif</span>
+                <span class="stat-label">Sistem Durumu</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <span class="stat-number">H2</span>
+                <span class="stat-label">Veritabanı</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">Kayıtlı Araçlar</h2>
+            <a th:href="@{/ui/vehicles}" class="btn-primary">Tümünü Gör</a>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Plaka</th>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Vites</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="v : ${vehicles}">
+                    <td th:text="${v.id}"></td>
+                    <td><span class="badge-plate" th:text="${v.plate}"></span></td>
+                    <td th:text="${v.brand}"></td>
+                    <td th:text="${v.model}"></td>
+                    <td th:text="${v.gearType}"></td>
+                    <td>
+                        <a th:href="@{/ui/services/vehicle/{id}(id=${v.id})}" class="btn-sm">Servis Geçmişi</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(vehicles)}">
+                    <td colspan="6" class="empty-row">Henüz araç kaydı yok.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
